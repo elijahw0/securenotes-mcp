@@ -3,6 +3,7 @@ import logging
 import sys
 import re
 from pathlib import Path
+import os
 
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -13,7 +14,11 @@ logger = logging.getLogger(__name__)
 
 server = MCPServer("SecureNotesMCP", version="1.0.0")
 
-path = Path(__file__).parent.parent / "securenotes-lab" / "findings.json"
+env_file = os.environ.get("FINDINGS")
+if env_file:
+    path = Path(__file__).parent / env_file
+else:
+    path = Path(__file__).parent.parent / "securenotes-lab" / "findings.json"
 
 SAFE_STATUSES = {"fixed"}
 NON_BLOCKING_SEVERITIES = {"medium", "low"}
